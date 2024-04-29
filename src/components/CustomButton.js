@@ -1,14 +1,13 @@
 import { StyleSheet, Text, Pressable } from "react-native";
 import React from "react";
 
-const CustomButton = ({ buttonText, setWidth, handleOnPress }) => {
+const CustomButton = ({ buttonText, handleOnPress }) => {
   return (
     <Pressable
       onPress={handleOnPress}
       style={({ pressed }) => [
         {
           backgroundColor: pressed ? "gray" : "#000066",
-          width: setWidth,
         },
         styles.button,
       ]}
@@ -22,7 +21,7 @@ export default CustomButton;
 
 const styles = StyleSheet.create({
   button: {
-    width: "100%",
+    width: "80%", // Burada istediğiniz genişliği ayarlayabilirsiniz
     borderWidth: 2,
     height: 50,
     borderRadius: 10,

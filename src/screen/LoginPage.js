@@ -1,13 +1,17 @@
-import { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Loading, CustomTextInput, CustomButton } from "../components/index";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsLoading } from "../redux/userSlice";
+import { login } from "../redux/userSlice";
+import { useState } from "react";
 
 export default function LoginPage({ navigation }) {
+  const { isLoading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [result, setResult] = useState("");
 
-  const [isloading, setİsloading] = useState(false);
+  console.log("Login", login);
 
   return (
     <View style={styles.container}>
@@ -18,14 +22,14 @@ export default function LoginPage({ navigation }) {
       <CustomTextInput
         title="Email"
         isSecureText={false}
-        handleOnChangeText={email}
+        handleOnChangeText={(text) => setEmail(text)}
         handleValue={setEmail}
         handlePlaceHolder="Enter Your Email"
       />
       <CustomTextInput
         title="password"
         isSecureText={true}
-        handleOnChangeText={setPassword}
+        handleOnChangeText={(password) => setPassword(password)}
         handleValue={password}
         handlePlaceHolder="Enter Your Password"
       />
@@ -33,7 +37,7 @@ export default function LoginPage({ navigation }) {
       <CustomButton
         buttonText="login"
         setWidth="80%"
-        handleOnPress={() => setİsloading(true)}
+        handleOnPress={() => dispatch(login({ email, password }))}
       />
 
       <CustomButton
@@ -42,8 +46,8 @@ export default function LoginPage({ navigation }) {
         handleOnPress={() => navigation.navigate("SignUp")}
       />
 
-      {isloading ? (
-        <Loading changeİsLoading={() => setİsloading(false)} />
+      {isLoading ? (
+        <Loading changeİsLoading={() => dispatch(setIsLoading(false))} />
       ) : null}
     </View>
   );
