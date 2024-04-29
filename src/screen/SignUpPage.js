@@ -91,6 +91,12 @@ const SignUpPage = ({ navigation }) => {
         >
           <Text>Already have a an account? Login</Text>
         </Pressable>
+
+        <CustomButton
+          buttonText="Forma git"
+          setWidth="80%"
+          handleOnPress={() => navigation.navigate("Form")}
+        />
       </View>
     </SafeAreaView>
   );
