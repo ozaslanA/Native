@@ -7,12 +7,41 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import { CustomTextInput, CustomButton } from "../components";
+import { CustomTextInput, CustomButton, Loading } from "../components";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../redux/userSlice";
+import * as Yup from "yup";
+
+export const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, "İsim en az 2 karakter olmalıdır.")
+    .required("İsim zorunludur."),
+});
 
 const SignUpPage = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [nameError, setNameError] = useState("");
+
+  const dispatch = useDispatch();
+
+  const { isLoading } = useSelector((state) => state.user);
+  const handleRegister = () => {
+    dispatch(register({ email, password }));
+  };
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const handleNameChange = (text) => {
+    setName(text);
+    // Her değer değiştiğinde doğrulama yap
+    validationSchema
+      .validate({ name: text })
+      .then(() => setNameError(""))
+      .catch((error) => setNameError(error.errors[0]));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,10 +56,12 @@ const SignUpPage = ({ navigation }) => {
         <CustomTextInput
           title="Name"
           isSecureText={false}
-          handleOnChangeText={setName}
+          handleOnChangeText={handleNameChange}
           handleValue={name}
           handlePlaceHolder="Enter Your Name"
         />
+        {nameError !== "" && <Text style={{ color: "red" }}>{nameError}</Text>}
+
         <CustomTextInput
           title="Email"
           isSecureText={false}
@@ -52,16 +83,7 @@ const SignUpPage = ({ navigation }) => {
           setWidth="80%"
           buttonColor="blue"
           pressedButtonColor="gray"
-          handleOnPress={() =>
-            console.log(
-              "NAME :" + name,
-              "",
-              "EMAİL : " + email,
-              "",
-              "PASWORD : " + password,
-              ""
-            )
-          }
+          handleOnPress={handleRegister}
         />
         <Pressable
           onPress={() => navigation.navigate("Login")}

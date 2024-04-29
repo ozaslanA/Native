@@ -21,7 +21,7 @@ export default CustomButton;
 
 const styles = StyleSheet.create({
   button: {
-    width: "80%", // Burada istediğiniz genişliği ayarlayabilirsiniz
+    width: "80%",
     borderWidth: 2,
     height: 50,
     borderRadius: 10,
